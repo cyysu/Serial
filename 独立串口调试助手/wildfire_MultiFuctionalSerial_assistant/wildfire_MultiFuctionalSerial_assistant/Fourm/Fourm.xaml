@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="wildfire_MultiFuctionalSerial_assistant.Fourm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinWidth="785" MinHeight="570" Background="White">
+    <Grid>
+        <TabControl TabStripPlacement="Left"  >
+
+            <TabItem Header="每日一题">
+                <Frame Navigating="CommondFrame_Navigating" NavigationFailed="CommondFrame_NavigationFailed" Source="http://www.chuxue123.com/forum.php?mod=collection&amp;action=view&amp;ctid=3&amp;fromop=all" >
+
+                </Frame>
+            </TabItem>
+
+            <TabItem Header="STM32讨论区">
+                <Frame Navigating="CommondFrame_Navigating" NavigationFailed="CommondFrame_NavigationFailed"  Source="http://www.chuxue123.com/forum.php?mod=forumdisplay&amp;fid=63" >
+
+                </Frame>
+            </TabItem>
+            <TabItem Header="淘帖专区">
+                <Frame Navigating="CommondFrame_Navigating" NavigationFailed="CommondFrame_NavigationFailed" Source="http://www.chuxue123.com/forum.php?mod=collection&amp;op=all&amp;order=threadnum" >
+
+                </Frame>
+            </TabItem>
+
+            <TabItem Header="野火STM32产品">
+                <Frame Navigating="CommondFrame_Navigating" NavigationFailed="CommondFrame_NavigationFailed" Source="http://firestm32.taobao.com/" >
+
+                </Frame>
+            </TabItem>
+
+
+        </TabControl>
+
+    </Grid>
+</UserControl>

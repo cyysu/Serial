@@ -1,0 +1,34 @@
+﻿<Window x:Class="wildfire_MultiFuctionalSerial_assistant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:MultiFunction="clr-namespace:wildfire_MultiFuctionalSerial_assistant"
+     
+        Title="野火多功能调试助手V0.2.0" Name="softWareMainWindow" Width="810" Height="640" MinWidth="810"  MinHeight="640">
+    <Grid >
+        <TabControl Name="functionTabControl" SelectionChanged="FunctionTabControl_SelectionChanged">
+            <TabItem Header="串口调试功能">
+                <MultiFunction:SerialBasic ></MultiFunction:SerialBasic>
+                
+            </TabItem>
+            <TabItem Header="网络调试功能">
+                <MultiFunction:Network ></MultiFunction:Network> 
+            </TabItem>
+            
+            <!--<TabItem Header="GSM调试功能">
+                <MultiFunction:GSMAssistant ></MultiFunction:GSMAssistant>             
+                
+            </TabItem>
+            
+            <TabItem Name="GPSItem" Header="GPS定位功能">
+                <MultiFunction:GPSMap></MultiFunction:GPSMap>
+            </TabItem>
+
+            <TabItem Name="FourmItem" Header="交流学习"  >
+                <MultiFunction:Fourm ></MultiFunction:Fourm>
+            </TabItem>-->
+            
+            
+        </TabControl>
+        
+    </Grid>
+</Window>

@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="wildfire_MultiFuctionalSerial_assistant.Fourm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinWidth="785" MinHeight="570" Background="White">
+    <Grid>
+        <TabControl TabStripPlacement="Right" >
+
+            <TabItem Header="每日一题">
+                <Frame   Source="http://www.chuxue123.com/forum.php?mod=collection&amp;action=view&amp;ctid=3&amp;fromop=all" >
+
+                </Frame>
+            </TabItem>
+
+            <TabItem Header="野火STM32">
+                <Frame Source="http://www.chuxue123.com/forum.php?mod=collection&amp;action=view&amp;ctid=5&amp;fromop=all" >
+
+                </Frame>
+            </TabItem>
+
+            <TabItem Header="野火K60">
+                <Frame Source="http://www.chuxue123.com/forum.php?mod=collection&amp;action=view&amp;ctid=1&amp;fromop=all" >
+
+                </Frame>
+            </TabItem>
+
+
+
+        </TabControl>
+
+    </Grid>
+</UserControl>
