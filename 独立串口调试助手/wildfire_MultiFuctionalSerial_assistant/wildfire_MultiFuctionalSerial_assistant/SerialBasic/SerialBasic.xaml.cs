@@ -39,7 +39,7 @@ namespace wildfire_MultiFuctionalSerial_assistant
         static UInt32 receiveBytesCount = 0;
         static UInt32 sendBytesCount = 0;
 
-        ArrayList receiveBytes = new ArrayList();
+        byte[] receiveBytes = new byte[10 * 1024 * 1024];   //默认10M的字节空间        
 
         #endregion
 
@@ -225,9 +225,6 @@ namespace wildfire_MultiFuctionalSerial_assistant
         {
             string receiveText = System.Text.Encoding.Default.GetString(data);
             
-            //更新接收字节数
-            receiveBytesCount += (UInt32)data.Length;
-            statusReceiveByteTextBlock.Text = receiveBytesCount.ToString();
 
             //没有关闭数据显示
             if(stopShowingButton.IsChecked == false)    
@@ -235,17 +232,33 @@ namespace wildfire_MultiFuctionalSerial_assistant
                 //字符串显示
                 if (hexadecimalDisplayCheckBox.IsChecked == false)
                 {
-                    receiveTextBox.AppendText(receiveText);                   
-                }                                   
+                    receiveTextBox.AppendText(receiveText);
+                    receiveBytesCount += (UInt32)data.Length;
+                }
                 else //16进制显示
                 {
+                    StringBuilder stringBuilder = new StringBuilder(8096);
                     foreach (byte str in data) 
                     {
-                        receiveTextBox.AppendText(string.Format("{0:X2} ", str));
-                        receiveBytes.Add(str);
+                        stringBuilder.AppendFormat("{0:X2} ", str);
+                        receiveBytes[receiveBytesCount++] = str;
+                        if(receiveBytesCount > receiveBytes.Length*3/4)
+                        {
+                            byte[] nRec = new byte[receiveBytes.Length * 2];
+                            Array.Copy(receiveBytes, nRec, receiveBytes.Length);
+                            receiveBytes = nRec;
+                        }
                     }
+                    receiveTextBox.AppendText(stringBuilder.ToString());
                 }
             }
+            else
+            {
+                receiveBytesCount += (UInt32)data.Length;
+            }
+
+            //更新接收字节数
+            statusReceiveByteTextBlock.Text = receiveBytesCount.ToString();
         }
 
         //设置滚动条显示到末尾
@@ -459,7 +472,9 @@ namespace wildfire_MultiFuctionalSerial_assistant
                     }
                     else
                     {
-                        File.WriteAllBytes(saveFile.FileName, (byte[])receiveBytes.ToArray(typeof(byte)));
+                        byte[] writeData = new byte[receiveBytesCount];
+                        Array.Copy(receiveBytes, writeData, receiveBytesCount);
+                        File.WriteAllBytes(saveFile.FileName, writeData);
                         statusTextBlock.Text = "保存成功！";
                     }
                  }
@@ -482,10 +497,8 @@ namespace wildfire_MultiFuctionalSerial_assistant
              receiveBytesCount = 0;
              sendBytesCount = 0;
 
-             receiveBytes.Clear();
-
              //更新数据显示
-             statusReceiveByteTextBlock.Text = receiveBytesCount.ToString();
+            statusReceiveByteTextBlock.Text = receiveBytesCount.ToString();
              statusSendByteTextBlock.Text = sendBytesCount.ToString();
 
          }
