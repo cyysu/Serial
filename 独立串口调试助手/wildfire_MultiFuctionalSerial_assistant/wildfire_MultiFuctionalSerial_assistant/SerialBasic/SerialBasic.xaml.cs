@@ -19,6 +19,7 @@ using System.Threading;
 using System.Windows.Threading;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
+using System.Collections;
 
 namespace wildfire_MultiFuctionalSerial_assistant
 {
@@ -32,13 +33,13 @@ namespace wildfire_MultiFuctionalSerial_assistant
         #region 内部变量
         private SerialPort serial = new SerialPort();
 
-        private string receiveData;
-
         private DispatcherTimer autoSendTimer = new DispatcherTimer();
         private DispatcherTimer autoDetectionTimer = new DispatcherTimer();
 
         static UInt32 receiveBytesCount = 0;
         static UInt32 sendBytesCount = 0;
+
+        ArrayList receiveBytes = new ArrayList();
 
         #endregion
 
@@ -46,7 +47,6 @@ namespace wildfire_MultiFuctionalSerial_assistant
 
         public SerialBasic()
         {
-
 
             InitializeComponent();
 
@@ -212,20 +212,21 @@ namespace wildfire_MultiFuctionalSerial_assistant
         #region 接收显示窗口
 
         //接收数据
-        private delegate void UpdateUiTextDelegate(string text);
+        private delegate void UpdateUiTextDelegate(byte[] data);
         private void ReceiveData(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            receiveData = serial.ReadExisting();
+            byte[] receiveData = new byte[serial.BytesToRead];
+            serial.Read(receiveData, 0, receiveData.Length);
             Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(ShowData), receiveData);
         }
 
         //显示数据
-        private void ShowData(string text)
+        private void ShowData(byte[] data)
         {
-            string receiveText = text;
+            string receiveText = System.Text.Encoding.Default.GetString(data);
             
             //更新接收字节数
-            receiveBytesCount += (UInt32)receiveText.Length;
+            receiveBytesCount += (UInt32)data.Length;
             statusReceiveByteTextBlock.Text = receiveBytesCount.ToString();
 
             //没有关闭数据显示
@@ -234,20 +235,17 @@ namespace wildfire_MultiFuctionalSerial_assistant
                 //字符串显示
                 if (hexadecimalDisplayCheckBox.IsChecked == false)
                 {
-                    receiveTextBox.AppendText(receiveText);
-                   
+                    receiveTextBox.AppendText(receiveText);                   
                 }                                   
                 else //16进制显示
                 {
-                    byte[] recData = System.Text.Encoding.Default.GetBytes(receiveText);// 将接受到的字符串据转化成数组；  
-                    
-                    foreach (byte str in recData)
+                    foreach (byte str in data) 
                     {
                         receiveTextBox.AppendText(string.Format("{0:X2} ", str));
+                        receiveBytes.Add(str);
                     }
                 }
             }
-                
         }
 
         //设置滚动条显示到末尾
@@ -454,10 +452,16 @@ namespace wildfire_MultiFuctionalSerial_assistant
                  saveFile.Filter = "TXT文本|*.txt";
                  if (saveFile.ShowDialog() == true)
                  {
-                     File.AppendAllText(saveFile.FileName,"\r\n******"+DateTime.Now.ToString()+"******\r\n");
-                     File.AppendAllText(saveFile.FileName, receiveTextBox.Text);
-                     statusTextBlock.Text = "保存成功！";
-                    
+                    if (hexadecimalDisplayCheckBox.IsChecked == false)
+                    { 
+                        File.AppendAllText(saveFile.FileName, receiveTextBox.Text);
+                        statusTextBlock.Text = "保存成功！";
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(saveFile.FileName, (byte[])receiveBytes.ToArray(typeof(byte)));
+                        statusTextBlock.Text = "保存成功！";
+                    }
                  }
 
 
@@ -477,6 +481,8 @@ namespace wildfire_MultiFuctionalSerial_assistant
              //接收、发送计数清零
              receiveBytesCount = 0;
              sendBytesCount = 0;
+
+             receiveBytes.Clear();
 
              //更新数据显示
              statusReceiveByteTextBlock.Text = receiveBytesCount.ToString();

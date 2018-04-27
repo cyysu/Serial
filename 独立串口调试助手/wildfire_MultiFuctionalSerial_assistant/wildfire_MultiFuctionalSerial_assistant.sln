@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wildfire_MultiFuctionalSerial_assistant", "wildfire_MultiFuctionalSerial_assistant\wildfire_MultiFuctionalSerial_assistant.csproj", "{CF73FFC9-9F2A-4FDE-8F83-9EF56E7FBD4B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2803BD27-B7CC-43C2-9F4E-867084899253} = {2803BD27-B7CC-43C2-9F4E-867084899253}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nmeaLib", "nmeaLib\nmeaLib.vcxproj", "{2803BD27-B7CC-43C2-9F4E-867084899253}"
 EndProject
@@ -40,8 +43,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
